@@ -1,0 +1,85 @@
+# Programme qui récupère les données de 4 sondes thermo-hygrométriques en FTP
+
+# -*- coding: utf-8 -*-
+
+import ftplib, os, time, locale
+locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
+
+
+# Fonction
+def extraction(ip,port,user,pwd,localisation,output):
+    """"Extrait les données de chaque sonde"""
+
+    global i,error,server,mois,rapport
+
+    try :
+        server.connect(ip,port)
+        server.login(user,pwd)
+        server.cwd(localisation)
+    except :
+        print('Connexion impossible sonde '+ip)
+    try :
+        with open (rapport, 'wb') as fp:
+            server.retrbinary('RETR '+rapport, fp.write)
+
+        #server.delete(rapport)
+        server.quit()
+        os.rename(rapport,time.strftime(output))
+        i += 1
+    except:
+        print("Erreur avec le fichier sonde "+ip)
+        error += 1
+
+# Variables
+i = 1
+error = 0
+server = ftplib.FTP()
+mois = str(time.strftime('%B %Y'))
+rapport = str(time.strftime('%Y_%m.d00'))
+
+# Indiquer les dossiers de téléchargement :
+os.chdir('C:/Rapports')
+chemin = 'C:/Rapports/'+mois
+
+# Vérifie si le dossier du mois existe. Sinon, le créé :
+if (os.path.exists(chemin)):
+    os.chdir(chemin)
+else:
+    os.mkdir(mois)
+    os.chdir(chemin)
+
+print("")
+print("Connexion ...")
+print("")
+print("Extraction ...")
+print("")
+
+extraction("xxx.xxx.xxx.xxx",555,"admin","admin","DAATTAA/HT20/22030003/ARCH",time.strftime("%Y-%m-%d_relevé Centre atelier confection.csv"))
+extraction("xxx.xxx.xxx.xxy",555,"admin","admin","DAATTAA/HT20/21060003/ARCH",time.strftime("%Y-%m-%d_relevé Centre TH + YD Tricotage.csv"))
+extraction("xxx.xxx.xxx.xxa",555,"admin","admin","DAATTAA/HT20/21060002/ARCH",time.strftime("%Y-%m-%d_relevé Zone machine HF - confection.csv"))
+extraction("xxx.xxx.xxx.xxz",555,"admin","admin","DAATTAA/HT20/22060001/ARCH",time.strftime("%Y-%m-%d_relevé Zone température métier 8-12 - Tricotage.csv"))
+
+# En cas d'impossibilité de téléchargement :
+if (error == 4):
+    os.remove(rapport)
+    print("")
+    print("Aucun fichier à télécharger pour le moment.")
+    print("")
+    time.sleep(1)
+
+# En cas de problème spécifique :
+elif (error >= 1):
+    os.remove(rapport)
+    print("")
+    print("1 ou plusieurs fichiers n'ont pas pu être télécharger")
+    print("")
+    time.sleep(1)
+
+# Si les 4 fichiers sont là 
+elif (error == 0):
+    print("")
+    print("Terminé.")
+    print("")
+    time.sleep(1)
+
+    # *~*~*
