@@ -57,13 +57,13 @@ if jeton == True:
         print("Erreur try 2")
         print(" ")
 
-# Création du tableau pour phonak.csv :
+# Création du tableau pour mission.csv :
     
     contacts = []
     i = 0
     limite = len(tableau)
     for row in tableau:
-        contacts.append(["0","Phonak Sortant J+3",dateJour,"",tableau[i][2],tableau[i][1],tableau[i][3],tableau[i][4],tableau[i][5],tableau[i][6],
+        contacts.append(["0","Mission Sortant J+3",dateJour,"",tableau[i][2],tableau[i][1],tableau[i][3],tableau[i][4],tableau[i][5],tableau[i][6],
         tableau[i][7],tableau[i][8],tableau[i][10],tableau[i][9],tableau[i][11],tableau[i][12],tableau[i][13],
         tableau[i][14],tableau[i][15],tableau[i][0]])
         i = i + 1
@@ -91,11 +91,11 @@ if jeton == True:
     
     del contacts[0]
 
-    # Création du fichier phonak.csv :
+    # Création du fichier mission.csv :
     
     try :
-        phonak = open(destination + '/nom.csv', 'w', encoding='latin-1', newline='')
-        ecrire = csv.writer(phonak, delimiter=';')
+        mission = open(destination + '/nom.csv', 'w', encoding='latin-1', newline='')
+        ecrire = csv.writer(mission, delimiter=';')
         for ligneContact in contacts:
             ecrire.writerow(ligneContact)
 
@@ -120,7 +120,7 @@ if jeton == True:
     # Création du fichier CRM.csv :
     
     try:
-        crm = open(destination + '/CRM phonak.csv', 'w', encoding='latin-1', newline='')
+        crm = open(destination + '/CRM mission.csv', 'w', encoding='latin-1', newline='')
         ecrire = csv.writer(crm, delimiter=',')
         for ligneContact in contactsCRM:
             ecrire.writerow(ligneContact)
