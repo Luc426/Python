@@ -1,0 +1,46 @@
+# Affiche une phrase entrée par l'utilisateur en binaire et en décimale
+
+def binaire(nombre):
+    """Transforme une écriture décimale en écriture binaire"""
+    valeurBits = [128,64,32,16,8,4,2,1]
+    valeurOctet = []
+
+    for valeur in valeurBits:
+        if ((nombre - valeur) >= 0):
+            nombre = nombre - valeur
+            valeurOctet.append(str(1))
+
+        else:
+            valeurOctet.append(str(0))
+
+    octet = "".join(valeurOctet)
+    return octet
+
+phrase = input("Quel est votre phrase ? : ")
+phrase = str(phrase)
+
+s=''
+chaineDecimale = ''
+chaineBinaire = ''
+nombreOctets = 0
+
+print(f'La phrase : {phrase}')
+print("")
+
+# Affiche la phrase en décimale
+for lettre in phrase:
+    s = ord(lettre)
+    chaineDecimale += str(s) + " "
+    chaineBinaire += binaire(s) + " "
+    nombreOctets += 1
+
+print("S'écrit en décimale :")
+print(chaineDecimale)
+print("")
+
+print("S'écrit en binaire :")
+print(chaineBinaire)
+print("")
+
+print(f"Il y a {nombreOctets} octets dans cette chaîne :")
+print("")
