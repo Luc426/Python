@@ -1,6 +1,7 @@
 #!/usr/bin/python3.8
 
-# Récupère un fichier CSV laissé par un client sur un serveur SFTP, puis génère un fichier CSV personnalisé utilisable par l'entreprise
+# Récupère des données de clients à contacter sur un fichier CSV depuis un serveur SFTP, puis génère un autre fichier CSV personnalisé 
+# adapté aux bases de données de l'entreprise.
 
 import pysftp, os, time, csv
 
