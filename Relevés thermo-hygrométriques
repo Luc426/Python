@@ -1,4 +1,5 @@
 # Programme qui récupère les données de 4 sondes thermo-hygrométriques en FTP
+# Puis convertit les données dans un fichier CSV
 
 # -*- coding: utf-8 -*-
 
