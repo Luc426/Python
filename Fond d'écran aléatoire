@@ -1,0 +1,41 @@
+#!/usr/bin/python3.9
+
+# Change le fond d'écran en fonction du moment de la journée (sur Linux avec gnome)
+
+import subprocess, time, random
+
+tempsJour = time.strftime("%H")
+tempsJour = int(tempsJour)
+
+def getWallpaper():
+	periode = subprocess.run(["/usr/bin/gsettings", "get", "org.gnome.desktop.background", 
+	"picture-uri"], capture_output=True)
+	periode = str(periode)
+	return periode
+
+def changeWallpaper(string):
+		x = random.randint(1,12)
+		x = str(x)
+		subprocess.run(["/usr/bin/gsettings", "set", "org.gnome.desktop.background", 
+		"picture-uri", "'file:///home/toto/Images/"+string+"_"+x+".jpg'"])
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+momentJour = getWallpaper()
+
+# Si momentJour ne contient pas le mot clé, la valeur d'imageType est égale à -1
+if (tempsJour >= 8 and tempsJour < 13):
+	imageType = int(momentJour.find("morning"))
+	if (imageType == -1):
+		changeWallpaper("morning")
+
+if (tempsJour >= 13 and tempsJour < 18):
+	imageType = int(momentJour.find("afternoon"))
+	if (imageType == -1):
+		changeWallpaper("afternoon")
+
+if (tempsJour >= 18 or tempsJour < 8):
+	imageType = int(momentJour.find("night"))
+	if (imageType == -1):
+		changeWallpaper("night")
