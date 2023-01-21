@@ -1,0 +1,84 @@
+#!/usr/bin/python3.9
+
+Application de bureau pour NorthVPN
+
+from tkinter import *
+import pexpect, tkinter
+
+def activer():
+    "Active le VPN"
+    # variables utilisées dans tout le programme :
+    global password,choix
+
+    # Récupérer le choix de l'utilisateur :
+    choix = format(valeur1.get())
+    if choix == 'New York':
+        choix = 'New_York'
+    
+    if choix == 'San Francisco':
+        choix = 'San_Francisco'
+    
+    if choix == 'Sao Paulo':
+        choix = 'San_Paulo'
+
+    commandLine1 = pexpect.spawn('sudo systemctl start nordvpnd')
+    commandLine1.expect('[sudo]')
+    commandLine1.sendline(password)
+    commandLine1.read()
+
+    commandLine2 = pexpect.spawn('sudo nordvpn connect '+choix)
+    commandLine2.expect('[sudo]')
+    commandLine2.sendline(password)
+    commandLine2.read()
+
+def desactiver():
+    "Désactive le VPN"
+    global password
+
+    commandLine3 = pexpect.spawn('sudo nordvpn disconnect')
+    commandLine3.expect('[sudo]')
+    commandLine3.sendline(password)
+    commandLine3.read()
+
+    commandLine4 = pexpect.spawn('sudo systemctl stop nordvpnd')
+    commandLine4.expect('[sudo]')
+    commandLine4.sendline(password)
+    commandLine4.read()
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Programme
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+password = 'mot de passe de l'administrateur'
+choix = 'Paris'
+
+fen1 = tkinter.Tk()
+fen1.title('Virtual Private Network')
+
+liste = ['Paris', 'Marseille', 'Mumbai', 'Milan', 'Adelaide', 'Perth', 
+'Tokyo', 'New York', 'San Francisco', 'Phoenix', 'London', 'Berlin', 'Frankfurt',
+'Sao Paulo', 'Johannesburg', 'Toronto', 'Vancouver', 'Stockholm']
+
+valeur1 = tkinter.StringVar(fen1)
+valeur1.set('Paris')
+
+can1 = Canvas(fen1, width =200, height =200, bg ='white')
+
+# Image perso pour décorer la fenêtre 
+photo = PhotoImage(file ='/chemin/vers/image.png')
+can1.create_image(100,100, image =photo)
+can1.pack(side=TOP, pady=15)
+
+bou4 = tkinter.OptionMenu(fen1, valeur1, *liste)
+bou4.pack() 
+
+bou2 = Button(fen1,text='Activer',command=activer)
+bou2.pack(side=LEFT, padx=3, pady=3)
+
+bou3 = Button(fen1,text='Quitter',command=fen1.quit)
+bou3.pack(side=RIGHT, padx=3, pady=3)
+
+bou1 = Button(fen1,text='Désactiver',command=desactiver)
+bou1.pack(padx=3, pady=3)
+
+fen1.mainloop() 
