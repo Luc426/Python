@@ -1,6 +1,9 @@
 #!/usr/bin/python3.9
 
 # Change le fond d'écran en fonction du moment de la journée (sur Linux avec gnome)
+# Les images sont contenues dans un dossier. Elles sont nommées d'une certaine façon pour permettre leur affichage en journée :
+# exemple : afternoon_5.jpg, morning_3.jpg, night_10.jpg
+# Il doit donc y avoir au moins 10 images de chaque pour que le script fonctionne (10 images afternoon_x.jpg etc...)
 
 import subprocess, time, random
 
@@ -8,14 +11,17 @@ tempsJour = time.strftime("%H")
 tempsJour = int(tempsJour)
 
 def getWallpaper():
+	# Récupère la période indiquée dans le nom de l'image actuelle en fond d'écran : "afternoon" ? "morning" ? "night" ?
 	periode = subprocess.run(["/usr/bin/gsettings", "get", "org.gnome.desktop.background", 
 	"picture-uri"], capture_output=True)
 	periode = str(periode)
 	return periode
 
 def changeWallpaper(string):
-		x = random.randint(1,12)
+		# Sélectionne au hasard un nombre de 1 à 10 :
+		x = random.randint(1,10)
 		x = str(x)
+		# Modèle de récupération pour afficher la prochaine image : sa période, et le nombre 
 		subprocess.run(["/usr/bin/gsettings", "set", "org.gnome.desktop.background", 
 		"picture-uri", "'file:///home/toto/Images/"+string+"_"+x+".jpg'"])
 
@@ -24,7 +30,7 @@ def changeWallpaper(string):
 
 momentJour = getWallpaper()
 
-# Si momentJour ne contient pas le mot clé, la valeur d'imageType est égale à -1
+# Si momentJour ne contient pas le mot clé, la valeur d'imageType est égale à -1, donc changement de l'image possible durant ce créneau horaire :
 if (tempsJour >= 8 and tempsJour < 13):
 	imageType = int(momentJour.find("morning"))
 	if (imageType == -1):
