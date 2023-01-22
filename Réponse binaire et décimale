@@ -1,3 +1,5 @@
+#!/usr/bin/python3.9
+
 # Affiche une phrase entrée par l'utilisateur en binaire et en décimale
 
 def binaire(nombre):
